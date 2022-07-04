@@ -4,13 +4,10 @@ import com.company.model.DBCityModel;
 import com.company.model.DBOldCityModel;
 import com.company.repository.GetCityBase;
 import com.company.repository.Old_CityRepo;
-import com.company.utils.BotConfig;
 import com.company.utils.DbConfig;
-import com.google.inject.internal.asm.$AnnotationVisitor;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.objects.Message;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
+import com.sun.source.tree.UsesTree;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -58,6 +55,8 @@ public class Work {
         return charLastLeter;
     }
 
+
+
     public boolean compareOld(String cityByUser) {
         dateCollection();
         for (DBOldCityModel old : oldCit) {
@@ -65,10 +64,38 @@ public class Work {
 
             if (oldCity.equalsIgnoreCase(cityByUser)) {
 
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
+    }
+
+    public String compareCityWithBase (String name, ArrayList oldCit) throws IOException {
+        String city = ""; //создал переменную типа String
+        dateCollection();
+        //сравнение введенного города с базой городов
+        for (DBCityModel oCity : cit) {
+            city = oCity.getName();
+            if (city.equalsIgnoreCase(name)) { //сравнил без учета регистра
+                System.out.println("есть такой город");
+                myCity = cityByUser;
+
+
+            // вызываю метод для записи в список названных городов
+
+               int size =  oldCit.size();  //вычисляю размер листа
+
+                oldCit.add(size, city);  //добавляю в него правильно названный город
+              //  DBOldCityModel dbOldCityModel = new DBOldCityModel((String) city);
+
+
+
+
+               return myCity;
+            }
+        }
+        return  city;
+
     }
 
 
@@ -81,8 +108,9 @@ public class Work {
 
         Old_CityRepo old_cityRepo = new Old_CityRepo();
         old_cityRepo.getOldCity(oldCit);
-        System.out.println(oldCit.get(2).getName() + " Третья запись в таблице названых городов");
+       // System.out.println(oldCit.get(2).getName() + " Третья запись в таблице названых городов");
     }
+
 
 
 }

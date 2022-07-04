@@ -10,8 +10,8 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
-
 
 
 public class Bot extends TelegramLongPollingBot {
@@ -19,62 +19,123 @@ public class Bot extends TelegramLongPollingBot {
     ArrayList<DBCityModel> cit = new ArrayList<>(); //для работы с полной базой
     ArrayList<DBOldCityModel> oldCit = new ArrayList<>(); // для работы с названными городами
     char charLastLeter; //последняя буква названии города
+    int numOfCites; //общее кол-во городов в базе
+    String rndCity; // рандомный город
     String cityByUser;
     String myCity;
 
+    char simbol;
     String name = "";
+    boolean cicle = true;
 
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
         if (message != null && message.hasText()) {
-            if (message.getText().equals("/help")) {
-                sendMsg(message, "Привет, я бот игры 'Города' \n для старта игры используй /start \n лучшая пятёрка игроков /top5 \n лучшая десятка игроков /top10 \n информация о твоей игре /info");
+            switch (message.getText()) {
+                case "/help":
+                    sendMsg(message, "Привет, я бот игры 'Города' \n для старта игры используй /start \n лучшая пятёрка игроков /top5 \n лучшая десятка игроков /top10 \n информация о твоей игре /info");
+                    break;
+                case "/top5":
+                    sendMsg(message, "Тут вывелась пятерка лучших игроков");
+                    break;
+                case "/top10":
+                    sendMsg(message, "Тут вывелась десятка лучших игроков");
+                    break;
+                case "/info":
+                    sendMsg(message, "Тут вывелась инфо о твоей игре и количество набраных очков");
+                case "/start":
+                case "/старт":
+                    System.out.println("Start game");
+                    gameStart();
+                    sendMsg(message, "В базе  " + numOfCites + " городов ");
+                    sendMsg(message, "Старт игры, я начну первым и мой город:    " + rndCity);
+                    sendMsg(message, "Вспоминаем город на букву  " + Character.toUpperCase(simbol));
+                    return;
             }
-            if (message.getText().equals("/top10")) {
-                sendMsg(message, "Тут вывелась десятка лучших игроков");
-            }
-            if (message.getText().equals("/top5")) {
-                sendMsg(message, "Тут вывелась пятерка лучших игроков");
-            }
-            if (message.getText().equals("/info")) {
-                sendMsg(message, "Тут вывелась инфо о твоей игре и количество набраных очков");
-            }
-            if (message.getText().equals("/старт") || message.getText().equals("/start")) { // тут будет старт игры
-
-                Work work = new Work();
-                int number = work.amount();  //получаю кол-во городов
-                sendMsg(message, "В базе  " + number + " городов ");
-
-                Work work1 = new Work(); //получаю рандомный город
-                String rndCity = work.rand();
-
-                sendMsg(message, "Старт игры, я начну первым и мой город:    " + rndCity);
-
-                Work work2 = new Work();
-                char simbol = work2.findBeadLastLiter(rndCity);
-                sendMsg(message, "Вспоминаем город на букву  " + Character.toUpperCase(simbol));
-
-
+            if (message.hasText()) {
+                cityByUser = message.getText();
                 if (message.hasText()) {
-                    String messageText = update.getMessage().getText();
-                    sendMsg(message, "Ты назвал город " + messageText);
+                    compareOld();
+                    System.out.println(cityByUser);
+                    while (cicle == true) {
+                        sendMsg(message, "Такой город уже называли \n продолжаем вспомниать город на букву   " + Character.toUpperCase(simbol));
+                        break;
+                    }
+                    compareBase();  //проверка по общей базе
+                    System.out.println("выполнился метод сравнения по общей базе");
+
                 }
             }
-        }
-//
-
-
-        boolean cicle = false;
-        while (cicle = false) {
-            cityByUser = message.getText();  //получаю ответ (город) от пользователя
-            Work work3 = new Work();
-            cicle = work3.compareOld(cityByUser);
-            sendMsg(message, "Ты назвал город " + cityByUser);
         }
     }
 
 
+    public void gameStart() {
+        Work amountCity = new Work();
+        numOfCites = amountCity.amount();  //получаю кол-во городов
+        rndCity = amountCity.rand();  // получаю рандомный город
+        Work work2 = new Work();
+        simbol = work2.findBeadLastLiter(rndCity);
+    }
+
+    public void compareOld() {
+
+        Work compar = new Work();
+        cicle = compar.compareOld(cityByUser);
+
+    }
+
+
+    public void compareBase() {
+        System.out.println("ТУт проверка по базе всех городов");
+        Work compareAllBase = new Work();
+        try {
+            compareAllBase.compareCityWithBase(cityByUser, oldCit);
+        } catch (IOException e) {
+            System.out.println("Не выполнился метод compareCityWithBase в классе Work");
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+
+//
+//                if (message.hasText() && cicle == false) {
+//                    String messageText = update.getMessage().getText();
+//
+//                    while (cicle == false) {
+//                        cityByUser = message.getText();  //получаю ответ (город) от пользователя
+//                        Work work3 = new Work();
+//                        cicle = work3.compareOld(cityByUser);  //проверяю по названным городам
+//
+//                        if (cicle == false) {
+//                            sendMsg(message, "Такой город уже называли \n продолжаем вспомниать город на букву   " + Character.toUpperCase(simbol));
+//
+//                        }
+//                    }
+//
+//                    Work work4 = new Work();
+//                    try {
+//
+//                        work4.compareCityWithBase(cityByUser, oldCit);
+//
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+//
+//            }
+//        }
+//
+//
+////
+//
+//
+//    }
 
 
     private void sendMsg(Message message, String s) {
