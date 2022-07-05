@@ -28,6 +28,10 @@ public class Bot extends TelegramLongPollingBot {
     String name = "";
     boolean cicle = true;
 
+    Integer userIdIdent;  //id пользователя в telegram
+    String userName; //Имя пользователя
+    int score; //кол-во правильно названных городов
+
     @Override
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
@@ -56,6 +60,9 @@ public class Bot extends TelegramLongPollingBot {
             if (message.hasText()) {
                 cityByUser = message.getText();
                 if (message.hasText()) {
+                   userIdIdent = message.getFrom().getId();
+                   userName = message.getFrom().getUserName();
+
                     compareOld();
                     System.out.println(cityByUser);
                     while (cicle == true) {
@@ -63,7 +70,7 @@ public class Bot extends TelegramLongPollingBot {
                         break;
                     }
                     compareBase();  //проверка по общей базе
-                    System.out.println("выполнился метод сравнения по общей базе");
+                    System.out.println("Good: выполнился метод сравнения по общей базе");
 
                 }
             }
@@ -161,25 +168,6 @@ public class Bot extends TelegramLongPollingBot {
     public String getBotToken() {
         return BotConfig.BOT_TOKEN;
     }
-
-//    private void getUpdates(final TelegramBot bot) {
-//        try {
-//            GetUpdatesResponse response = bot.execute(
-//                    new GetUpdates()
-//                            .limit(LIMIT)
-//                            .offset(updateId.get())
-//                            .timeout(LONG_POLLING_TIMEOUT));
-//
-//            if (response != null && response.updates() != null && response.updates().size() > 0) {
-//                for (Update update : response.updates()) {
-//                    obtainUpdate(bot, update);
-//                    updateId.set(update.updateId() + 1);
-//                }
-//            }
-//        } catch (Exception e) {
-//            ErrorUtils.log(TAG, e);
-//        }
-//    }
 
 
 }

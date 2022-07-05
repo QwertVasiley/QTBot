@@ -20,7 +20,6 @@ public class DbConfig {
     public static Connection getDbConnection() {
 
 
-
         Properties databaseSettings = new Properties();
 
         try {

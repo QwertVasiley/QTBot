@@ -2,6 +2,7 @@ package com.company.bot;
 
 import com.company.model.DBCityModel;
 import com.company.model.DBOldCityModel;
+import com.company.repository.AddInOldBase;
 import com.company.repository.GetCityBase;
 import com.company.repository.Old_CityRepo;
 import com.company.utils.DbConfig;
@@ -78,17 +79,17 @@ public class Work {
             city = oCity.getName();
             if (city.equalsIgnoreCase(name)) { //сравнил без учета регистра
                 System.out.println("есть такой город");
-                myCity = cityByUser;
+                myCity = name;
 
 
-            // вызываю метод для записи в список названных городов
-
-               int size =  oldCit.size();  //вычисляю размер листа
-
+                // вызываю метод для записи в список названных городов
+                int size =  oldCit.size();  //вычисляю размер листа
+                AddInOldBase addInOldBase = new AddInOldBase();
+                addInOldBase.addOldCity(myCity);
                 oldCit.add(size, city);  //добавляю в него правильно названный город
               //  DBOldCityModel dbOldCityModel = new DBOldCityModel((String) city);
 
-
+                //взять имя и айди юзверя и записать в базу с одним очком
 
 
                return myCity;

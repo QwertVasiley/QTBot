@@ -14,8 +14,7 @@ import java.util.List;
 public class Old_CityRepo {
 
 
-        ArrayList<DBOldCityModel> oldCityModel;
-
+    ArrayList<DBOldCityModel> oldCityModel;
 
 
     public ArrayList getOldCity(ArrayList<DBOldCityModel> oldCit) {
@@ -39,7 +38,7 @@ public class Old_CityRepo {
             e.printStackTrace();
         }
 
-        return  oldCit;
+        return oldCit;
     }
 }
 

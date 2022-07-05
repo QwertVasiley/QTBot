@@ -2,17 +2,17 @@ package com.company.model;
 
 public class DBUserStatisticModel {
     private Long id;
-    private Long user_tel_id;
-    private String first_name;
+    private Long user_id_ident;
+    private String firstName;
     private Long game_score;
 
     public DBUserStatisticModel() {
     }
 
-    public DBUserStatisticModel(Long id, Long user_tel_id, String first_name, Long game_score) {
+    public DBUserStatisticModel(Long id, Long user_id_ident, String first_name, Long game_score) {
         this.id = id;
-        this.user_tel_id = user_tel_id;
-        this.first_name = first_name;
+        this.user_id_ident = user_id_ident;
+        this.firstName = first_name;
         this.game_score = game_score;
     }
 
@@ -24,20 +24,20 @@ public class DBUserStatisticModel {
         this.id = id;
     }
 
-    public Long getUser_tel_id() {
-        return user_tel_id;
+    public Long getUser_id_ident() {
+        return user_id_ident;
     }
 
-    public void setUser_tel_id(Long user_tel_id) {
-        this.user_tel_id = user_tel_id;
+    public void setUser_id_ident(Long user_id_ident) {
+        this.user_id_ident = user_id_ident;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public Long getGame_score() {
