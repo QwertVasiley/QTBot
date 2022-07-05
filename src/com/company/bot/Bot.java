@@ -2,6 +2,7 @@ package com.company.bot;
 
 import com.company.model.DBCityModel;
 import com.company.model.DBOldCityModel;
+import com.company.repository.AddUserInfo;
 import com.company.utils.BotConfig;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
@@ -28,9 +29,9 @@ public class Bot extends TelegramLongPollingBot {
     String name = "";
     boolean cicle = true;
 
-    Integer userIdIdent;  //id пользователя в telegram
-    String userName; //Имя пользователя
-    int score; //кол-во правильно названных городов
+    public Integer userIdIdent;  //id пользователя в telegram
+    public String userName; //Имя пользователя
+    public int score; //кол-во правильно названных городов
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -60,8 +61,9 @@ public class Bot extends TelegramLongPollingBot {
             if (message.hasText()) {
                 cityByUser = message.getText();
                 if (message.hasText()) {
-                   userIdIdent = message.getFrom().getId();
-                   userName = message.getFrom().getUserName();
+                    userIdIdent = message.getFrom().getId();
+                    userName = message.getFrom().getFirstName();
+                    score = 1;
 
                     compareOld();
                     System.out.println(cityByUser);
@@ -71,6 +73,7 @@ public class Bot extends TelegramLongPollingBot {
                     }
                     compareBase();  //проверка по общей базе
                     System.out.println("Good: выполнился метод сравнения по общей базе");
+
 
                 }
             }
@@ -98,7 +101,7 @@ public class Bot extends TelegramLongPollingBot {
         System.out.println("ТУт проверка по базе всех городов");
         Work compareAllBase = new Work();
         try {
-            compareAllBase.compareCityWithBase(cityByUser, oldCit);
+            compareAllBase.compareCityWithBase(cityByUser, oldCit, userIdIdent, userName);
         } catch (IOException e) {
             System.out.println("Не выполнился метод compareCityWithBase в классе Work");
             e.printStackTrace();
@@ -106,43 +109,6 @@ public class Bot extends TelegramLongPollingBot {
 
 
     }
-
-
-
-//
-//                if (message.hasText() && cicle == false) {
-//                    String messageText = update.getMessage().getText();
-//
-//                    while (cicle == false) {
-//                        cityByUser = message.getText();  //получаю ответ (город) от пользователя
-//                        Work work3 = new Work();
-//                        cicle = work3.compareOld(cityByUser);  //проверяю по названным городам
-//
-//                        if (cicle == false) {
-//                            sendMsg(message, "Такой город уже называли \n продолжаем вспомниать город на букву   " + Character.toUpperCase(simbol));
-//
-//                        }
-//                    }
-//
-//                    Work work4 = new Work();
-//                    try {
-//
-//                        work4.compareCityWithBase(cityByUser, oldCit);
-//
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                }
-//
-//            }
-//        }
-//
-//
-////
-//
-//
-//    }
 
 
     private void sendMsg(Message message, String s) {

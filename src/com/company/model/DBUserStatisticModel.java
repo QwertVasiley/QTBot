@@ -2,18 +2,24 @@ package com.company.model;
 
 public class DBUserStatisticModel {
     private Long id;
-    private Long user_id_ident;
-    private String firstName;
-    private Long game_score;
+    private Integer user_id_ident;
+    private String userName;
+    private Long score;
 
     public DBUserStatisticModel() {
     }
 
-    public DBUserStatisticModel(Long id, Long user_id_ident, String first_name, Long game_score) {
+    public DBUserStatisticModel(Long id, Integer user_id_ident, String first_name, Long score) {
         this.id = id;
         this.user_id_ident = user_id_ident;
-        this.firstName = first_name;
-        this.game_score = game_score;
+        this.userName = first_name;
+        this.score = score;
+    }
+
+    public DBUserStatisticModel(Integer user_id_ident, String userName, Long score) {
+        this.user_id_ident = user_id_ident;
+        this.userName = userName;
+        this.score = score;
     }
 
     public Long getId() {
@@ -24,27 +30,27 @@ public class DBUserStatisticModel {
         this.id = id;
     }
 
-    public Long getUser_id_ident() {
+    public Integer getUser_id_ident() {
         return user_id_ident;
     }
 
-    public void setUser_id_ident(Long user_id_ident) {
+    public void setUser_id_ident(Integer user_id_ident) {
         this.user_id_ident = user_id_ident;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public Long getGame_score() {
-        return game_score;
+    public Long getScore() {
+        return score;
     }
 
-    public void setGame_score(Long game_score) {
-        this.game_score = game_score;
+    public void setScore(Long score) {
+        this.score = score;
     }
 }

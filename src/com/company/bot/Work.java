@@ -3,10 +3,10 @@ package com.company.bot;
 import com.company.model.DBCityModel;
 import com.company.model.DBOldCityModel;
 import com.company.repository.AddInOldBase;
+import com.company.repository.AddUserInfo;
 import com.company.repository.GetCityBase;
 import com.company.repository.Old_CityRepo;
 import com.company.utils.DbConfig;
-import com.sun.source.tree.UsesTree;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +21,8 @@ public class Work {
     String myCity;
     int number;
     String name = "";
+    Integer score = 0;
+
 
     public int amount() {  //получаю общее кол-во городов
         this.number = number;
@@ -71,8 +73,10 @@ public class Work {
         return false;
     }
 
-    public String compareCityWithBase (String name, ArrayList oldCit) throws IOException {
+    public String compareCityWithBase (String name, ArrayList oldCit, Integer usId, String usName) throws IOException {
         String city = ""; //создал переменную типа String
+        Integer user_id = usId;
+        String nameUser = usName;
         dateCollection();
         //сравнение введенного города с базой городов
         for (DBCityModel oCity : cit) {
@@ -81,15 +85,23 @@ public class Work {
                 System.out.println("есть такой город");
                 myCity = name;
 
-
                 // вызываю метод для записи в список названных городов
                 int size =  oldCit.size();  //вычисляю размер листа
                 AddInOldBase addInOldBase = new AddInOldBase();
                 addInOldBase.addOldCity(myCity);
                 oldCit.add(size, city);  //добавляю в него правильно названный город
-              //  DBOldCityModel dbOldCityModel = new DBOldCityModel((String) city);
 
-                //взять имя и айди юзверя и записать в базу с одним очком
+                //записываю пользователя в базу
+                AddUserInfo addUserInfo = new AddUserInfo();
+
+
+                System.out.println(user_id);
+
+                System.out.println(nameUser);
+               score = score+1;
+               addUserInfo.addUserInfo(user_id,nameUser,score);
+
+
 
 
                return myCity;
