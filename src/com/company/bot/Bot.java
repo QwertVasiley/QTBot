@@ -3,16 +3,12 @@ package com.company.bot;
 import com.company.model.DBCityModel;
 import com.company.model.DBOldCityModel;
 import com.company.model.DBUserStatisticModel;
-import com.company.repository.AddUserInfo;
-import com.company.repository.GetUserInfo;
 import com.company.utils.BotConfig;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
-import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,10 +1,9 @@
 package com.company.repository;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
 
-import com.company.model.DBOldCityModel;
 import com.company.utils.DbConfig;
 
 import java.sql.*;

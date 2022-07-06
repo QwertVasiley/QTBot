@@ -1,6 +1,5 @@
 package com.company.repository;
 
-import com.company.model.DBCityModel;
 import com.company.model.DBUserStatisticModel;
 import com.company.utils.DbConfig;
 
