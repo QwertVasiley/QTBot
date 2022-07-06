@@ -4,35 +4,36 @@ import com.company.model.DBCityModel;
 import com.company.model.DBUserStatisticModel;
 import com.company.utils.DbConfig;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
+
 
 
 public class GetUserInfo {
 
-    public void getUserInfo() {
+    ArrayList<DBUserStatisticModel> userStatistic;
 
+    public ArrayList getUserInfo(ArrayList<DBUserStatisticModel> userStatistic) {
 
         try {
             Connection connection = DbConfig.getDbConnection();
             Statement statement = connection.createStatement();
             ResultSet resultSet;
-            resultSet = statement.executeQuery("SELECT * from users_game_city");
+            resultSet = statement.executeQuery("SELECT * FROM users_game_city");
+
             while (resultSet.next()) {
                 DBUserStatisticModel dbUserStatisticModel = new DBUserStatisticModel();
-                dbUserStatisticModel.setUser_id_ident((int) resultSet.getLong("user_id_ident"));
+                dbUserStatisticModel.setUser_id_ident(resultSet.getInt("user_id_ident"));
                 dbUserStatisticModel.setUserName(resultSet.getString("first_name"));
                 dbUserStatisticModel.setScore(resultSet.getLong("game_score"));
+                userStatistic.add(dbUserStatisticModel);
 
             }
 
-            // System.out.println(allCityTable.get(48).getName()); //для теста вывел город по индексу
-
         } catch (SQLException e) {
+            System.out.println("GetUserInfo не сработал");
             e.printStackTrace();
         }
-        return;
+        return userStatistic;
     }
 }

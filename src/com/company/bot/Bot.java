@@ -2,13 +2,16 @@ package com.company.bot;
 
 import com.company.model.DBCityModel;
 import com.company.model.DBOldCityModel;
+import com.company.model.DBUserStatisticModel;
 import com.company.repository.AddUserInfo;
+import com.company.repository.GetUserInfo;
 import com.company.utils.BotConfig;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 
 import java.io.IOException;
@@ -19,17 +22,21 @@ public class Bot extends TelegramLongPollingBot {
 
     ArrayList<DBCityModel> cit = new ArrayList<>(); //для работы с полной базой
     ArrayList<DBOldCityModel> oldCit = new ArrayList<>(); // для работы с названными городами
+    ArrayList<DBUserStatisticModel> dBUserStatist = new ArrayList<>(); //для работы с пользователями
     char charLastLeter; //последняя буква названии города
     int numOfCites; //общее кол-во городов в базе
     String rndCity; // рандомный город
     String cityByUser;
-    String myCity;
+    String newCityByUser;
+    String tmpCity = "";
 
     char simbol;
     String name = "";
     boolean cicle = true;
+    boolean resultUserCompare;
+    boolean yesNo = false;
 
-    public Integer userIdIdent;  //id пользователя в telegram
+    public int userIdIdent;  //id пользователя в telegram
     public String userName; //Имя пользователя
     public int score; //кол-во правильно названных городов
 
@@ -60,6 +67,7 @@ public class Bot extends TelegramLongPollingBot {
             }
             if (message.hasText()) {
                 cityByUser = message.getText();
+                tmpCity = cityByUser;
                 if (message.hasText()) {
                     userIdIdent = message.getFrom().getId();
                     userName = message.getFrom().getFirstName();
@@ -69,15 +77,66 @@ public class Bot extends TelegramLongPollingBot {
                     System.out.println(cityByUser);
                     while (cicle == true) {
                         sendMsg(message, "Такой город уже называли \n продолжаем вспомниать город на букву   " + Character.toUpperCase(simbol));
-                        break;
-                    }
-                    compareBase();  //проверка по общей базе
-                    System.out.println("Good: выполнился метод сравнения по общей базе");
+                        return;
 
+                    }
+                }
+
+                    System.out.println("ЯЯЯЯ  тута");
+
+                    compareBase();  //проверка по общей базе
+
+
+                    while (yesNo==true) {
+                        sendMsg(message, "Я такого города не знаю \n Продожаем вспоминать город на букву " + Character.toUpperCase(simbol));
+                        return;
+                    }
+                    Work findBead = new Work();
+                     simbol = findBead.findBeadLastLiter(cityByUser);
+                        sendMsg(message, "Молодец, есть такой город! \n Теперь вспоминаем город на букву " + Character.toUpperCase(simbol));
+                    System.out.println("Good: выполнился метод сравнения по общей базе");
 
                 }
             }
+
+
+//                  String first = cityByUser; //изначально загаданный город
+//                    compareBase();  //проверка по общей базе
+//                    String second = cityByUser; //который назвали и сравнили с базой
+//
+//                 if (first == second) sendMsg(message, "Молодец, есть такой город! \n Теперь вспоминаем город на букву ,,,,");
+//                    System.out.println("Good: выполнился метод сравнения по общей базе");
+//
+//
+//                    compareUser(); // проверка пользователя был в игре или нет
+//                    if (resultUserCompare==false){
+//                        Work recUser = new Work();
+//                        recUser.recUderInfo(userIdIdent,userName);
+//                    }
+//
+////                }else {
+////                    sendMsg(message, "hdsajfhkakfjkjasklfk");
+////                }
+
+//
+//
+//                    compareUser(); // проверка пользователя был в игре или нет
+//                    if (resultUserCompare==false){
+//                        Work recUser = new Work();
+//                        recUser.recUderInfo(userIdIdent,userName);
+//                    }
+//
+////                }else {
+////                    sendMsg(message, "hdsajfhkakfjkjasklfk");
+////                }
+
         }
+
+
+
+    public void compareUser() {
+        Work userCompare = new Work();
+        resultUserCompare = userCompare.compareUser(userIdIdent);
     }
 
 
@@ -98,10 +157,12 @@ public class Bot extends TelegramLongPollingBot {
 
 
     public void compareBase() {
-        System.out.println("ТУт проверка по базе всех городов");
+        System.out.println("Тут проверка по базе всех городов");
         Work compareAllBase = new Work();
+
         try {
-            compareAllBase.compareCityWithBase(cityByUser, oldCit, userIdIdent, userName);
+            compareAllBase.compareCityWithBase(cityByUser, oldCit,yesNo);
+
         } catch (IOException e) {
             System.out.println("Не выполнился метод compareCityWithBase в классе Work");
             e.printStackTrace();

@@ -31,7 +31,6 @@ public class GetCityBase {
 
             }
 
-           // System.out.println(allCityTable.get(48).getName()); //для теста вывел город по индексу
 
         } catch (SQLException e) {
             e.printStackTrace();
